@@ -1,0 +1,27 @@
+{
+  "name": "ng-wordpress-theme",
+  "version": "1.0.0",
+  "description": "WordPress theme powered by AngularJS and WP REST API v2",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ekudriashov/ng-wordpress-theme.git"
+  },
+  "author": "Eugene Kudriashov",
+  "license": "GPL-2.0",
+  "bugs": {
+    "url": "https://github.com/ekudriashov/ng-wordpress-theme/issues"
+  },
+  "homepage": "https://github.com/ekudriashov/ng-wordpress-theme#readme",
+  "dependencies": {
+    "angular": "^1.6.2",
+    "angular-route": "^1.6.2",
+    "animate.css": "^3.5.2",
+    "bootstrap": "^3.3.7",
+    "flickity": "^2.0.5",
+    "waypoints": "^4.0.1"
+  }
+}
