@@ -5,18 +5,26 @@ angular.module('ngWordpress', ['ngRoute', 'ngSanitize'])
 	});
 	$routeProvider
 	.when('/', {
-		templateUrl: localized.partials + 'posts-main.html',
-		controller: 'postsMain'
+		templateUrl: localized.partials + 'main.html',
+		controller: 'mainCtr'
+	})
+	.when('/post/:slug', {
+		templateUrl: localized.partials + 'single-post.html',
+		controller: 'singlePostCtr'
 	})
 	.when('/:slug', {
-		templateUrl: localized.partials + 'single-post.html',
-		controller: 'singlePost'
+		templateUrl: localized.partials + 'single-page.html',
+		controller: 'singlePageCtr'
+	})
+	.when('/category/:slug', {
+		templateUrl: localized.partials + 'archive.html',
+		// controller: 'archiveCtr'
 	})
 	.otherwise({
 		redirectTo: '/'
 	});
 })
-.controller('postsMain', function($scope, $http, $routeParams) {
+.controller('mainCtr', function($scope, $http, $routeParams) {
 	// making rows
 	function chunk_data(array, size){
 		var dataArr = [];
@@ -35,7 +43,7 @@ angular.module('ngWordpress', ['ngRoute', 'ngSanitize'])
 		$scope.posts = chunk_data(response.data, 2);
 	});
 })
-.controller('singlePost', function($scope, $http, $routeParams) {
+.controller('singlePostCtr', function($scope, $http, $routeParams) {
 	$http({
 		url: 'wp-json/wp/v2/posts',
 		method:'GET',
@@ -46,11 +54,43 @@ angular.module('ngWordpress', ['ngRoute', 'ngSanitize'])
 		$scope.post = response.data[0];
 	});
 })
-.controller('topMenu', function($scope, $http){
+.controller('singlePageCtr', function($scope, $http, $routeParams) {
+	$http({
+		url: 'wp-json/wp/v2/pages',
+		method:'GET',
+ 		params: {
+			'slug': $routeParams.slug
+		}
+	}).then(function(response){
+		$scope.page = response.data[0];
+		//console.log(response.data);
+	});
+})
+.controller('topMenuCtr', function($scope, $http, $location) {
+	// convert URLs to SLUGs
+	function changeDataUrls(data) {
+		for(var i = 0; i < data.length; i++){
+			if(data[i].hasOwnProperty("url")){
+				var l = document.createElement("a");
+				l.href = data[i].url;
+				data[i].url = l.pathname.slice(0, -1);
+			}
+		}
+		return data;
+	}
+
+	$scope.isActive = function(item) {
+      if (item.url == $location.path()) {
+        return true;
+      }
+      return false;
+    }
+
 	$http({
 		url: 'wp-json/wp-api-menus/v2/menu-locations/primary',
 		method:'GET',
 	}).then(function(response){
-		$scope.topmenu = response.data;
+		$scope.topmenu = changeDataUrls(response.data);
+		//console.log($scope.topmenu);
 	});
 });
