@@ -25,9 +25,9 @@
 					<a href="/"><?php bloginfo( 'name' ); ?></a>
 				</div>
 				<div class="primary-nav-wrapper">
-					<nav ng-controller="topMenu">
+					<nav ng-controller="topMenuCtr">
 						<ul class="primary-nav">
-							<li ng-repeat="link in topmenu">
+							<li ng-repeat="link in topmenu" ng-class="{active: isActive(link)}">
 								<a ng-href="{{link.url}}">{{link.title}}</a>
 							</li>
 						</ul>
