@@ -1,0 +1,51 @@
+<!-- SECTION: Single Header -->
+	<section class="single-header alternate-bg has-padding">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<h1 class="wp1 animated fadeInUp is-centered" ng-bind-html="post.title.rendered"></h1>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 wp2 animated fadeInUp content-atts">
+					<p>By <a ng-href="/author/{{post.post_author_name}}" class="atts-link">{{post.post_author_name}}</a> -- In <a ng-repeat="category in post.post_categories" ng-href="/category/{{category.slug}}"> {{category.name}}</a> -- Posted <a class="atts-link">{{post.date | date:'longDate'}}</a></p>
+				</div>
+			</div>
+		</div>
+	</section>
+<!-- END SECTION: Single Header -->
+
+<!-- SECTION: Single Content -->
+	<section class="single-content">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-8 wp3 animated fadeInUp">
+					<article class="single-post">
+						<div class="featured-img">
+							<img ng-src="{{post.featured_thumb_url}}" class="img-responsive center-block" alt="">
+						</div>
+						<div class="post-content" ng-bind-html="post.content.rendered">
+						</div>
+
+						<div class="media about-author">
+							<div class="media-left">
+								<a ng-href="/author/{{post.post_author_name}}"><img ng-src="{{post.post_author_avatar}}"></a>
+							</div>
+							<div class="media-body">
+								<h3><a ng-href="/author/{{post.post_author_name}}">{{post.post_author_name}}</a></h3>
+								<p>{{post.post_author_bio}}</p>
+							</div>
+						</div>
+
+					</article>
+				</div>
+				<!-- Sidebar: widgets area -->
+				<!-- temporary hardcoded -->
+				<aside class="col-md-4 wp3 animated fadeInUp">
+					<h4 class="theme-title">Widgets animate test</h4>
+				</aside>
+				<!-- END Sidebar: widgets area -->
+			</div>
+		</div>
+	</section>
+<!-- END SECTION: Single Content
