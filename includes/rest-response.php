@@ -24,8 +24,8 @@ function ngwordpress_rest_prepare( $data, $post, $context ) {
 		$data->data['featured_thumb_url'] = $featured_image_url[0];
 	}
 
-	// $categories = get_the_category( $post->ID );
-	$data->data['post_categories'] = get_the_category( $post->ID );
+	$categories = get_the_category( $post->ID );
+	$data->data['post_categories'] = $categories;
 
 	$data->data['post_comments_count'] = wp_count_comments( $post->ID );
 
