@@ -1,1 +1,39 @@
-<h1>Template for category and archives</h1>
+<!-- SECTION: Single Page Header -->
+	<section class="single-header alternate-bg has-padding">
+		<div class="container">
+			<div class="row wp1 animated fadeInUp">
+				<div class="col-md-12">
+					<h1 class="is-centered">{{category.name}}</h1>
+					<h5 class="is-centered" ng-show="category.description">{{category.description}}</h5>
+				</div>
+			</div>
+		</div>
+	</section>
+<!-- END SECTION: Single Page Header -->
+<!-- SECTION: Articles -->
+<section class="latest-articles has-padding wp1 animated fadeInUp">
+	<div class="container">
+		<div class="row" ng-repeat="row in posts" ng-class="{'has-top-margin': !$first}">
+			<div class="col-md-6" ng-repeat="item in row">
+				<article id="post-{{item.id}}" class="article-post">
+					<a href="/post/{{item.slug}}">
+						<div class="article-image has-overlay" style="background-image: url('{{item.featured_thumb_url}}')">
+						</div>
+						<figure>
+							<figcaption>
+								<h2>{{item.title.rendered}}</h2>
+								<div ng-bind-html="item.excerpt.rendered"></div>
+							</figcaption>
+						</figure>
+					</a>
+					<div class="article-footer">
+						<i class="fa fa-folder-o" ng-show="item.post_categories"></i>
+						<a ng-repeat="category in item.post_categories" ng-href="/category/{{category.slug}}"> {{category.name}}</a>
+						<span class="article-comments"><i class="fa fa-comments"></i> {{item.post_comments_count.approved}}</span>
+					</div>
+				</article>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- END SECTION: Articles -->
