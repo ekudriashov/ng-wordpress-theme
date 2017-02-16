@@ -111,7 +111,9 @@ function ngwordpress_enqueue() {
 	wp_enqueue_script( 'angular', get_template_directory_uri() . '/node_modules/angular/angular.min.js', array(), null );
 	wp_enqueue_script( 'angular-route', get_template_directory_uri() . '/node_modules/angular-route/angular-route.min.js', array(), null );
 	wp_enqueue_script('angular-sanitize', get_template_directory_uri() . '/node_modules/angular-sanitize/angular-sanitize.min.js', array(), null);
+
 	wp_enqueue_script( 'application', get_template_directory_uri() . '/assets/app.js', array('angular', 'angular-route'), null );
+	wp_enqueue_script( 'application-service', get_template_directory_uri() . '/assets/scripts/services/NGWPService.js', array('application'), null );
 	
 
 	// With get_stylesheet_directory_uri()
