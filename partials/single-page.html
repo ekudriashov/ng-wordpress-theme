@@ -1,2 +1,25 @@
-<h1>{{page.title.rendered}}</h1>
-<p>{{page.content.rendered}}</p>
+<!-- SECTION: Single Page Header -->
+	<section class="single-header alternate-bg has-padding">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<h1 class="wp1 animated fadeInUp is-centered" ng-bind-html="page.title.rendered"></h1>
+				</div>
+			</div>
+		</div>
+	</section>
+<!-- END SECTION: Single Page Header -->
+<!-- SECTION: Single Page Content -->
+	<section class="single-content">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12 wp3 animated fadeInUp">
+					<div class="post-content" ng-bind-html="page.content.rendered">
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+<!-- END SECTION: Single Page Content -->
+
+
