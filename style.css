@@ -198,8 +198,7 @@ h4.theme-title::after {
 
 h5 {
     font-size: 13px;
-    font-weight: 600;
-    display: inline-block;
+    font-weight: 400;
     text-transform: uppercase;
     color: #232731
 }
