@@ -1,5 +1,6 @@
-angular.module('ngWordpress', ['ngRoute', 'ngSanitize'])
-.config(function($routeProvider, $locationProvider) {
+var app = angular.module('ngWordpress', ['ngRoute', 'ngSanitize']);
+
+app.config(function($routeProvider, $locationProvider) {
 	$locationProvider.html5Mode({
 		enabled: true
 	});
@@ -18,13 +19,14 @@ angular.module('ngWordpress', ['ngRoute', 'ngSanitize'])
 	})
 	.when('/category/:slug', {
 		templateUrl: localized.partials + 'archive.html',
-		// controller: 'archiveCtr'
+		controller: 'archiveCtr'
 	})
 	.otherwise({
 		redirectTo: '/'
 	});
-})
-.controller('mainCtr', function($scope, $http, $routeParams) {
+});
+
+app.controller('mainCtr', function(ngwpService, $scope, $routeParams) {
 	// making rows
 	function chunk_data(array, size){
 		var dataArr = [];
@@ -33,40 +35,55 @@ angular.module('ngWordpress', ['ngRoute', 'ngSanitize'])
 		}
 		return dataArr;
 	}
-	$http({
-		url: 'wp-json/wp/v2/posts',
-		method:'GET',
- 		params: {
-			'per_page': 6
-		}
-	}).then(function(response){
-		$scope.posts = chunk_data(response.data, 2);
+	// Posts list data
+	ngwpService.getPosts({per_page: 6}).then(function(resp) {
+		$scope.posts = chunk_data(resp.data, 2);
+		// console.log(resp);
 	});
-})
-.controller('singlePostCtr', function($scope, $http, $routeParams) {
-	$http({
-		url: 'wp-json/wp/v2/posts',
-		method:'GET',
- 		params: {
-			'slug': $routeParams.slug
-		}
-	}).then(function(response){
-		$scope.post = response.data[0];
+});
+
+app.controller('singlePostCtr', function(ngwpService, $scope, $routeParams) {
+	ngwpService.getPosts({slug: $routeParams.slug}).then(function(resp) {
+		$scope.post = resp.data[0];
+		// console.log($scope.post);
 	});
-})
-.controller('singlePageCtr', function($scope, $http, $routeParams) {
-	$http({
-		url: 'wp-json/wp/v2/pages',
-		method:'GET',
- 		params: {
-			'slug': $routeParams.slug
-		}
-	}).then(function(response){
-		$scope.page = response.data[0];
-		//console.log(response.data);
+});
+
+app.controller('singlePageCtr', function(ngwpService, $scope, $routeParams) {
+	ngwpService.pagesList().then(function(resp) {
+		$scope.page = resp.filter(function(entry){
+			return entry.slug === $routeParams.slug;
+		})[0];
+		// console.log($scope.page);
 	});
-})
-.controller('topMenuCtr', function($scope, $http, $location) {
+});
+
+app.controller('archiveCtr', function(ngwpService, $scope, $routeParams) {
+	var current_category;
+	function chunk_data(array, size){
+		var dataArr = [];
+		for (var i=0; i<array.length; i+=size) {
+			dataArr.push(array.slice(i, i+size));
+		}
+		return dataArr;
+	}
+
+	ngwpService.categoriesList().then(function(resp) {
+		current_category = resp.filter(function(entry){
+			//take care of all slugs, even setted with weird languages (like russian)
+			return entry.slug === angular.lowercase(encodeURI($routeParams.slug));
+		})[0];
+		// console.log($routeParams.slug);
+		//console.log(current_category);
+		$scope.category = current_category;
+		ngwpService.getPosts({categories: current_category.id, per_page: 6}).then(function(resp) {
+			$scope.posts = chunk_data(resp.data, 2);
+			// console.log(resp);
+		});
+	});
+});
+
+app.controller('topMenuCtr', function(ngwpService, $scope, $location) {
 	// convert URLs to SLUGs
 	function changeDataUrls(data) {
 		for(var i = 0; i < data.length; i++){
@@ -78,19 +95,14 @@ angular.module('ngWordpress', ['ngRoute', 'ngSanitize'])
 		}
 		return data;
 	}
-
 	$scope.isActive = function(item) {
-      if (item.url == $location.path()) {
-        return true;
-      }
-      return false;
-    }
-
-	$http({
-		url: 'wp-json/wp-api-menus/v2/menu-locations/primary',
-		method:'GET',
-	}).then(function(response){
-		$scope.topmenu = changeDataUrls(response.data);
-		//console.log($scope.topmenu);
+		if (decodeURI(item.url) == $location.path()) {
+			return true;
+		}
+		return false;
+	}
+	ngwpService.menuList().then(function(response){
+		$scope.topmenu = changeDataUrls(response);
+		// console.log($scope.topmenu);
 	});
 });
